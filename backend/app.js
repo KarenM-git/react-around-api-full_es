@@ -8,7 +8,7 @@ const usersRoutes = require('./routes/users');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://127.0.0.1:27017/mydb"); 
+mongoose.connect("mongodb://localhost:27017/mydb");
 
 app.use((req, res, next) => {
   req.user = {
