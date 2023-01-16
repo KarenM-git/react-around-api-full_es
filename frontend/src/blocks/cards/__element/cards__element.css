@@ -1,0 +1,12 @@
+.cards__element {
+  width: 282px;
+  background-color: #ffffff;
+  border-radius: 13px;
+  position: relative;
+}
+
+@media screen and (max-width: 860px) {
+  .cards__element {
+    margin: 0 auto;
+  }
+}

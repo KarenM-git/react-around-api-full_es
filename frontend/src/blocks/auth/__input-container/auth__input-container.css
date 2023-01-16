@@ -1,0 +1,7 @@
+.auth__input-container {
+    display: flex;
+    flex-direction: column;
+    height: 84px;
+    display: flex;
+    justify-content: space-between;
+}

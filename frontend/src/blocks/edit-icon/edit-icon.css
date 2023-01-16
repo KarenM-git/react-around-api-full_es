@@ -1,0 +1,11 @@
+.edit-icon {
+  height: 26px;
+  width: 26px;
+  margin: auto;
+  background-image: url(../../images/edit-icon.png);
+  background-position: center;
+  object-fit: contain;
+  background-color: transparent;
+  background-repeat: no-repeat;
+}
+

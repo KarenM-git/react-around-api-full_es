@@ -1,0 +1,9 @@
+.profile__avatar-container {
+  position: relative;
+  margin: auto;
+}
+
+.profile__avatar-container:hover .profile__avatar-overlay {
+  opacity: 1;
+  transition: 0.8s ease-out;
+}

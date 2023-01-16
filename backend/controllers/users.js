@@ -1,5 +1,9 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const user = require("../models/user");
+
+
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -81,7 +85,7 @@ module.exports.updateAvatar = (req, res) => {
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  User.findOne({ email })
+  User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
         return Promise.reject(new Error("Incorrect password or email"));
@@ -93,10 +97,19 @@ module.exports.login = (req, res) => {
 
         return Promise.reject(new Error("Incorrect password or email"));
       }
+      return (user);
 
-      res.send({ message: "¡Todo bien!" });
+    }).then(() => {
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', {expiresIn: '7d'});
+      res.send({ token });
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      res
+        .status(401)
+        .send({ message: err.message });
     });
 };
+
+module.exports.getUserInfo = (req, res) => {
+
+}

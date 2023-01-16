@@ -1,0 +1,14 @@
+.auth__input {
+  width: 358px;
+height: 27px;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: none;
+  border-bottom: 2px solid #CCCCCC;
+}

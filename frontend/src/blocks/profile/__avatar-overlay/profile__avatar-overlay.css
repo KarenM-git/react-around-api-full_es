@@ -1,0 +1,11 @@
+.profile__avatar-overlay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 120px;
+  height: 120px;
+  border-radius: 120px;
+  top:0%;
+  display: flex;
+  opacity: 0;
+  transition: .8s ease-out;
+}
