@@ -111,7 +111,7 @@ class Api {
 }
 
 const api = new Api({
-  address: "https://around.nomoreparties.co/v1/cohort-1-es",
+  address: "https://api.around-full-km.students.nomoredomainssbs.ru",
   token: "2be75b7b-0f52-418b-b96c-41c3ad1377b3",
 });
 

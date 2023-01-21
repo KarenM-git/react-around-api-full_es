@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 const { errors } = require("celebrate");
 
+
 const app = express();
 const cardsRoutes = require('./routes/cards');
 const usersRoutes = require('./routes/users');
@@ -30,13 +31,18 @@ mongoose
 //   next();
 // });
 app.use(requestLogger);
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("El servidor va a caer");
+  }, 0);
+}); 
+app.post("/signin", login);
+app.post("/signup", createUser);
+app.use(auth);
 
 app.use('/', cardsRoutes);
 app.use('/', usersRoutes);
-app.post("/signin", login);
-app.post("/signup", createUser);
 
-app.use(auth);
 
 
 const notFound = (req, res) => {

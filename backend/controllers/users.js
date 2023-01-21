@@ -2,6 +2,9 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const user = require("../models/user");
+require("dotenv").config();
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 
 
 
@@ -28,7 +31,7 @@ module.exports.getUserById = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
-User.create({ name, about, avatar, email, hash });
+User.create({ name: name, about: about, avatar:avatar, email:email, password:hash });
    })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
@@ -100,16 +103,19 @@ module.exports.login = (req, res) => {
       return (user);
 
     }).then(() => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', {expiresIn: '7d'});
-      res.send({ token });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
+        { expiresIn: "7d" }
+      );
+      res.send({ token: token });
     })
     .catch((err) => {
       res
         .status(401)
         .send({ message: err.message });
-    });
+    })
+
+  .catch(next);
 };
 
-module.exports.getUserInfo = (req, res) => {
-
-}
