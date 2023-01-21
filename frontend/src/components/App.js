@@ -22,6 +22,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [userData, setUserData] = React.useState({});
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [token, setToken] = React.useState("");
   const history = useHistory();
 
   React.useEffect(() => {
@@ -33,6 +34,7 @@ function App() {
           setIsLoggedIn(true);
           setUserData({ ...res.data });
           history.push("/");
+          setToken(token);
         }
       });
     }
@@ -40,7 +42,7 @@ function App() {
 
   React.useEffect(() => {
     api
-      .getUserData()
+      .getUserData(token)
       .then((res) => {
         setCurrentUser(res);
       })
@@ -62,7 +64,7 @@ function App() {
 
   React.useEffect(() => {
     api
-      .getInitialCards()
+      .getInitialCards(token)
       .then((res) => {
         setCards([...res]);
       })
@@ -81,7 +83,7 @@ function App() {
 
   function handleUpdateUser(name, about) {
     api
-      .saveProfileData(name, about)
+      .saveProfileData(name, about, token)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -93,7 +95,7 @@ function App() {
 
   function handleUpdateAvatar(avatar) {
     api
-      .updateProfilePic(avatar)
+      .updateProfilePic(avatar, token)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -105,7 +107,7 @@ function App() {
 
   function handleAddPlaceSubmit(name, link) {
     api
-      .addCardToServer(name, link)
+      .addCardToServer(name, link, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -134,7 +136,7 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, !isLiked)
+      .changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -147,7 +149,7 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id)
+      .deleteCard(card._id, token)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
       })
@@ -183,6 +185,7 @@ function App() {
           setIsLoggedIn(true);
           history.push("/");
           localStorage.setItem("token", res.token);
+          setToken(res.token);
         }
       })
       .catch((err) => {

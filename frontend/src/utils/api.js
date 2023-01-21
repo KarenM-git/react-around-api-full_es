@@ -1,13 +1,12 @@
 class Api {
   constructor({ address, token }) {
     this._address = address;
-    this._token = token;
   }
 
-  async getUserData() {
+  async getUserData(token) {
     const res = await fetch(`${this._address}/users/me`, {
       headers: {
-        authorization: this._token,
+      authorization: token,
       },
     });
     if (res.ok) {
@@ -16,10 +15,10 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async getInitialCards() {
+  async getInitialCards(token) {
     const res = await fetch(`${this._address}/cards`, {
       headers: {
-        authorization: this._token,
+       authorization: token,
       },
     });
     if (res.ok) {
@@ -28,11 +27,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async saveProfileData({ name, about }) {
+  async saveProfileData({ name, about }, token) {
     const res = await fetch(`${this._address}/users/me`, {
       method: "PATCH",
       headers: {
-        authorization: this._token,
+       authorization: token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -46,11 +45,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async updateProfilePic({ avatar }) {
+  async updateProfilePic({ avatar }, token) {
     const res = await fetch(`${this._address}/users/me/avatar`, {
       method: "PATCH",
       headers: {
-        authorization: this._token,
+       authorization: token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -63,11 +62,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async addCardToServer({ name, link }) {
+  async addCardToServer({ name, link }, token) {
     const res = await fetch(`${this._address}/cards`, {
       method: "POST",
       headers: {
-        authorization: this._token,
+        authorization: token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -81,11 +80,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async deleteCard(cardId) {
+  async deleteCard(cardId, token) {
     const res = await fetch(`${this._address}/cards/` + cardId, {
       method: "DELETE",
       headers: {
-        authorization: this._token,
+        authorization: token,
         "Content-Type": "application/json",
       },
     });
@@ -95,11 +94,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async changeLikeCardStatus(cardId, isLiked) {
+  async changeLikeCardStatus(cardId, isLiked, token) {
     const res = await fetch(`${this._address}/cards/likes/` + cardId, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
-        authorization: this._token,
+       authorization: token,
         "Content-Type": "application/json",
       },
     });
@@ -112,7 +111,6 @@ class Api {
 
 const api = new Api({
   address: "https://api.around-full-km.students.nomoredomainssbs.ru",
-  token: "2be75b7b-0f52-418b-b96c-41c3ad1377b3",
 });
 
 export default api;
