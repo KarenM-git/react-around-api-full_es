@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
 const { JWT_SECRET } = process.env;
 
 module.exports = (req, res, next) => {
@@ -20,5 +21,5 @@ module.exports = (req, res, next) => {
 
   req.user = payload;
 
-  next(new Error("Error de autorización"));
+  next();
 };

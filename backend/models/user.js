@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-
-
 const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
@@ -20,9 +18,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator(v) {
-        return /^((http[s]?):\/\/)(www.)?[a-z0-9\-]+\.[a-z]+(\/[a-zA-Z0-9\._~:\/*\?%#\[\]@!\$&'\(\)\*\+,;=]*)*#?\/?$/.test(
-          v
-        );
+        validator.isURL(v);
       },
       message: "Invalid Url",
     },

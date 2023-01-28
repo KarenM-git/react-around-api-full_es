@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require("celebrate");
 const validator = require('validator');
 const {
-  getUsers, getUserById, createUser, updateProfile, updateAvatar
+  getUsers, getUserById, createUser, updateProfile, updateAvatar, getMe
 } = require('../controllers/users');
 
 const validateURL = (value, helpers) => {
@@ -13,6 +13,7 @@ const validateURL = (value, helpers) => {
 };
 
 router.get('/users', getUsers);
+router.get("/users/me", getMe);
 router.get('/users/:id', getUserById);
 router.post(
   "/users",
@@ -38,7 +39,7 @@ router.patch(
   }),
   updateAvatar
 );
-router.get('/users/me', getUsers);
+
 
 
 module.exports = router;

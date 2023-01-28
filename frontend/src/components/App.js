@@ -180,6 +180,7 @@ function App() {
     auth
       .authorize({ email, password })
       .then((res) => {
+        console.log(res);
         if (res.token) {
           setValues({ email: "", password: "" });
           setIsLoggedIn(true);

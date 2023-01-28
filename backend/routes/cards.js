@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const validator = require("validator");
+
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
@@ -20,7 +22,7 @@ router.post(
       link: Joi.string().required().custom(validateURL),
     }),
   }),
-  createCard
+  createCard,
 );
 router.delete('/:id', deleteCard);
 router.put('/cards/:cardId/likes', likeCard);
