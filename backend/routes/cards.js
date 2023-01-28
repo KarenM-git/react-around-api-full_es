@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const validator = require("validator");
+const validator = require('validator');
 
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
   }
-  return helpers.error("string.uri");
+  return helpers.error('string.uri');
 };
 
 const { Joi, celebrate } = require('celebrate');
@@ -15,7 +15,7 @@ const {
 
 router.get('/cards', getCards);
 router.post(
-  "/cards",
+  '/cards',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().required(),

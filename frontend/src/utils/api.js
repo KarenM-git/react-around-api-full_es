@@ -1,12 +1,13 @@
 class Api {
-  constructor({ address}) {
+  constructor({ address }) {
     this._address = address;
+    this._token = localStorage.getItem("token");
   }
 
-  async getUserData(token) {
+  async getUserData() {
     const res = await fetch(`${this._address}/users/me`, {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
       },
     });
     if (res.ok) {
@@ -15,10 +16,10 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async getInitialCards(token) {
+  async getInitialCards() {
     const res = await fetch(`${this._address}/cards`, {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
       },
     });
     if (res.ok) {
@@ -27,11 +28,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async saveProfileData({ name, about }, token) {
+  async saveProfileData({ name, about }) {
     const res = await fetch(`${this._address}/users/me`, {
       method: "PATCH",
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -45,11 +46,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async updateProfilePic({ avatar }, token) {
+  async updateProfilePic({ avatar }) {
     const res = await fetch(`${this._address}/users/me/avatar`, {
       method: "PATCH",
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -62,11 +63,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async addCardToServer({ name, link }, token) {
+  async addCardToServer({ name, link }) {
     const res = await fetch(`${this._address}/cards`, {
       method: "POST",
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -80,11 +81,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async deleteCard(cardId, token) {
-    const res = await fetch(`${this._address}/cards/` + cardId, {
+  async deleteCard(cardId) {
+    const res = await fetch(`${this._address}/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
     });
@@ -94,11 +95,11 @@ class Api {
     return await Promise.reject(`Error: ${res.status}`);
   }
 
-  async changeLikeCardStatus(cardId, isLiked, token) {
-    const res = await fetch(`${this._address}/cards/likes/` + cardId, {
+  async changeLikeCardStatus(cardId, isLiked) {
+    const res = await fetch(`${this._address}/cards/${cardId}/likes`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${this._token}`,
         "Content-Type": "application/json",
       },
     });

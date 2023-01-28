@@ -22,11 +22,10 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [userData, setUserData] = React.useState({});
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [token, setToken] = React.useState("");
   const history = useHistory();
 
   React.useEffect(() => {
-    
+    console.log("renderizado");
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
       auth.getContent(token).then((res) => {
@@ -34,22 +33,27 @@ function App() {
           setIsLoggedIn(true);
           setUserData({ ...res.data });
           history.push("/");
-          setToken(token);
         }
       });
+      api
+        .getUserData()
+        .then((res) => {
+          setCurrentUser(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      api
+        .getInitialCards()
+        .then((res) => {
+          setCards(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  }, [history]); 
+  }, [history, isLoggedIn]);
 
-  React.useEffect(() => {
-    api
-      .getUserData(token)
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
@@ -62,16 +66,6 @@ function App() {
   const [isRegistered, setIsRegistered] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    api
-      .getInitialCards(token)
-      .then((res) => {
-        setCards([...res]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
@@ -83,9 +77,9 @@ function App() {
 
   function handleUpdateUser(name, about) {
     api
-      .saveProfileData(name, about, token)
+      .saveProfileData(name, about)
       .then((res) => {
-        setCurrentUser(res);
+        setCurrentUser(res.data);
         closeAllPopups();
       })
       .catch((err) => {
@@ -95,9 +89,9 @@ function App() {
 
   function handleUpdateAvatar(avatar) {
     api
-      .updateProfilePic(avatar, token)
+      .updateProfilePic(avatar)
       .then((res) => {
-        setCurrentUser(res);
+        setCurrentUser(res.data);
         closeAllPopups();
       })
       .catch((err) => {
@@ -107,9 +101,9 @@ function App() {
 
   function handleAddPlaceSubmit(name, link) {
     api
-      .addCardToServer(name, link, token)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
+      .addCardToServer(name, link)
+      .then((res) => {
+        setCards([res.data, ...cards]);
         closeAllPopups();
       })
       .catch((err) => {
@@ -134,12 +128,12 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, !isLiked, token)
-      .then((newCard) => {
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((res) => {
         setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
+          state.map((c) => (c._id === card._id ? res.data : c))
         );
       })
       .catch((err) => {
@@ -149,7 +143,7 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id, token)
+      .deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
       })
@@ -180,13 +174,11 @@ function App() {
     auth
       .authorize({ email, password })
       .then((res) => {
-        console.log(res);
         if (res.token) {
           setValues({ email: "", password: "" });
           setIsLoggedIn(true);
           history.push("/");
           localStorage.setItem("token", res.token);
-          setToken(res.token);
         }
       })
       .catch((err) => {

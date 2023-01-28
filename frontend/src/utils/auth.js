@@ -1,4 +1,5 @@
 const BASE_URL = "https://api.around-full-km.students.nomoredomainssbs.ru";
+const token = localStorage.getItem("token");
 
 export const register = ({ email, password }) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -6,37 +7,35 @@ export const register = ({ email, password }) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password })
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw new Error(res.error);
-        }
-      })
+    body: JSON.stringify({ email, password }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.error) {
+        throw new Error(res.error);
+      }
+    });
 };
-
 
 export const authorize = ({ email, password }) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
-      'Accept': "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password}),
+    body: JSON.stringify({ email, password }),
   })
     .then((response) => response.json())
-      .then((data) => {
-        if (data.token) {
+    .then((data) => {
+      if (data.token) {
         return data;
       }
     })
     .catch((err) => console.log(err));
 };
 
-
-export const getContent = (token) => {
+export const getContent = () => {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
@@ -46,4 +45,4 @@ export const getContent = (token) => {
   })
     .then((res) => res.json())
     .then((res) => res);
-}; 
+};
